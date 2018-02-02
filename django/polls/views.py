@@ -1,5 +1,6 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
+
 #from django.template import loader
 
 from .models import Question, Choice
@@ -29,7 +30,10 @@ def detail(request, question_id):
     :param question_id:
     :return:
     """
-    question = Question.objects.get(pk=question_id)
+    try:
+        question = Question.objects.get(pk=question_id)
+    except Question.DoesNotExist:
+        raise Http404('Question does not exist')
     context = {
         'question': question,
     }
